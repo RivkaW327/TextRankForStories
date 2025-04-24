@@ -1,0 +1,15 @@
+﻿  IntervalTree.cpp
+  Paragraph.cpp
+  bindings.cpp
+  text_ranker.cpp
+C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(13,20): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(14,21): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(19,20): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(20,31): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(76,14): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(155,14): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(190,14): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(258,14): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
+     Creating library C:\Users\user\Documents\year2\project\TextRank\x64\Debug\TextRank.lib and object C:\Users\user\Documents\year2\project\TextRank\x64\Debug\TextRank.exp
+  TextRank.vcxproj -> C:\Users\user\Documents\year2\project\TextRank\x64\Debug\TextRank.dll
