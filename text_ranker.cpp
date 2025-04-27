@@ -51,7 +51,6 @@ bool TextRanker::ExtractKeyParagraphs(const std::string& input, std::vector<std:
     if (input.empty() || topK < 1) {
         return false;
     }
-    //this->mParagraphs = split_with_positions(input, "###PARA###");
 
     for (size_t i = 0; i < characters.size(); i++)
     {
@@ -99,7 +98,7 @@ bool TextRanker::ExtractParagraphs(const std::string& input, std::vector<Paragra
         return false; 
     }
 
-    static const int maxTextLen = 10000;  // Maximum number of characters (need to consider word separators, UTF encoding, etc.)
+    static const int maxTextLen = 100000;  // Maximum number of characters (need to consider word separators, UTF encoding, etc.)
     std::string tempInput;
     if ((int)input.size() > maxTextLen) {
         tempInput = input.substr(0, maxTextLen);  // Articles that are too long will be truncated
@@ -121,7 +120,6 @@ bool TextRanker::ExtractParagraphs(const std::string& input, std::vector<Paragra
     std::vector<Paragraph> tempOutput2;
     for (int i=0; i<(int)tempOutput.size(); i++) {
         if ((int)(tempOutput[i].GetPosition().high-tempOutput[i].GetPosition().low) < minParagraphLen) {
-            //לבדוק אם לא מפריע לי 
             tempOutput2.push_back(tempOutput[i]);   // The number of characters in a single sentence is too small, so it is discarded.
         }
         else {
@@ -214,7 +212,7 @@ bool TextRanker::InitCharsList(std::vector<Paragraph>& paragraphs, const std::ve
             Node* res = overlapSearch(root, characters[i][j]);
             if (res == nullptr)
                 // צריך לבדוק מה לעשות במקרה של דמות שחוצה את הפסקאות
-                std::cout << "\nNo overlaps";
+                std::cout << "\nNo overlaps ["<<characters[i][j].low<<" , "<<characters[i][j].high<<"]\n";
                 // לסדר שאם הוא נמצא בשתיהם אז הקשת שלהם תקבל ניקוד גבוה.
             else
                 paragraphs[res->paragraphIndex].SetCharacters(i);

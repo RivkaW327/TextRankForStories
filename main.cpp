@@ -282,7 +282,8 @@ int main() {
     };
 
 	std::vector<Paragraph> outputs;
-	textRanker.ExtractKeyParagraphs(input, characters, outputs, 4);
+    // לסדר שמספר הפסקאות המחולצות יהיו לפי אחוזים
+	textRanker.ExtractKeyParagraphs(input, characters, outputs, 5);
 	std::cout << "Extracted Paragraphs:\n";
 	for (const auto& para : outputs) {
 		std::cout << para.GetText() << "\n\n\n\n";
