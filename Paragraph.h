@@ -16,9 +16,9 @@ public:
 	// Destructor
 	~Paragraph() {}
 
-	/*bool operator==(const Paragraph& other) const {
+	bool operator==(const Paragraph& other) const {
 		return mText == other.mText && mPosition.high == other.mPosition.high && mPosition.low == other.mPosition.low && mCharsNum == other.mCharsNum && mCharacters == other.mCharacters;
-	}*/
+	}
 
 	// Getters
 	const std::string& GetText() const;
@@ -44,11 +44,11 @@ private:
 
 };
 
-//namespace std {
-//	template <>
-//	struct hash<Paragraph> {
-//		size_t operator()(const Paragraph& p) const {
-//			return std::hash<std::string>()(p.GetText());//^ std::hash<Interval>()(p.GetPosition());
-//		}
-//	};
-//}
+namespace std {
+	template <>
+	struct hash<Paragraph> {
+		size_t operator()(const Paragraph& p) const {
+			return std::hash<std::string>()(p.GetText());//^ std::hash<Interval>()(p.GetPosition());
+		}
+	};
+}

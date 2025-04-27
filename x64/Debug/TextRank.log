@@ -1,15 +1,13 @@
-﻿  IntervalTree.cpp
-  Paragraph.cpp
-  bindings.cpp
+﻿  main.cpp
+C:\Users\user\Documents\year2\project\TextRank\TextRank\main.cpp(8,22): warning C4566: character represented by universal-character-name '\u00E9' cannot be represented in the current code page (1255)
   text_ranker.cpp
-C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(13,20): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(14,21): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(19,20): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(20,31): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(76,14): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(155,14): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(190,14): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(258,14): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(14,20): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(15,21): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(20,20): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(21,31): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(78,14): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(159,14): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(194,14): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\user\Documents\year2\project\TextRank\TextRank\text_ranker.cpp(263,14): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
   Generating Code...
-     Creating library C:\Users\user\Documents\year2\project\TextRank\x64\Debug\TextRank.lib and object C:\Users\user\Documents\year2\project\TextRank\x64\Debug\TextRank.exp
-  TextRank.vcxproj -> C:\Users\user\Documents\year2\project\TextRank\x64\Debug\TextRank.dll
+  TextRank.vcxproj -> C:\Users\user\Documents\year2\project\TextRank\x64\Debug\TextRank.exe

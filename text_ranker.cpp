@@ -3,7 +3,8 @@
 #include <iostream>
 
 
-
+// קמפול:
+//  C:\Users\user\Documents\year2\project\TextRank\TextRank>C:\Users\user\AppData\Local\Programs\Python\Python312\python.exe setup.py build_ext --inplace
 
 static std::vector<Paragraph> split_with_positions(const std::string& str, const std::string& delimiter) {
     std::vector<Paragraph> tokens;
@@ -50,6 +51,7 @@ bool TextRanker::ExtractKeyParagraphs(const std::string& input, std::vector<std:
     if (input.empty() || topK < 1) {
         return false;
     }
+    //this->mParagraphs = split_with_positions(input, "###PARA###");
 
     for (size_t i = 0; i < characters.size(); i++)
     {
@@ -64,8 +66,8 @@ bool TextRanker::ExtractKeyParagraphs(const std::string& input, std::vector<std:
 
     // TextRank
     bool ret = true;
-    ret &= ExtractParagraphs(input, mParagraphs);
-    ret &= BuildGraph(mParagraphs, mCharacters);
+    ret &= ExtractParagraphs(input, this->mParagraphs);
+    ret &= BuildGraph(this->mParagraphs, this->mCharacters);
     ret &= CalcParagraphScores();
 
     if (!ret) {
@@ -100,7 +102,6 @@ bool TextRanker::ExtractParagraphs(const std::string& input, std::vector<Paragra
     static const int maxTextLen = 10000;  // Maximum number of characters (need to consider word separators, UTF encoding, etc.)
     std::string tempInput;
     if ((int)input.size() > maxTextLen) {
-        // לבדוק האם ניתן ללא לקטוע מאמרים ארוכים יותר
         tempInput = input.substr(0, maxTextLen);  // Articles that are too long will be truncated
     } else {
         tempInput = input;
@@ -114,24 +115,27 @@ bool TextRanker::ExtractParagraphs(const std::string& input, std::vector<Paragra
     //    StringReplaceAll(tempInput, punc, ".");
     //}
 
-    // Sentence segmentation
-    static const int minSentenceLen = 30;   // Minimum number of characters in a sentence (need to consider word separators, UTF encoding, etc.)
+    // Paragraph segmentation
+    static const int minParagraphLen = 30;   // Minimum number of characters in a sentence (need to consider word separators, UTF encoding, etc.)
     std::vector<Paragraph> tempOutput = split_with_positions(tempInput, "###PARA###");
     std::vector<Paragraph> tempOutput2;
     for (int i=0; i<(int)tempOutput.size(); i++) {
-        if ((int)(tempOutput[i].GetPosition().high-tempOutput[i].GetPosition().low) > minSentenceLen) {
+        if ((int)(tempOutput[i].GetPosition().high-tempOutput[i].GetPosition().low) < minParagraphLen) {
             //לבדוק אם לא מפריע לי 
             tempOutput2.push_back(tempOutput[i]);   // The number of characters in a single sentence is too small, so it is discarded.
         }
+        else {
+            outputs.push_back(tempOutput[i]);
+        }
     }
 
-    // Deduplication
+     //Deduplication
     //RemoveDuplicates(tempOutput2, outputs);
 
     // If there are too many sentences, they will be truncated
-    static const int maxSentencesNum = 50;
-    if ((int)outputs.size() > maxSentencesNum) {
-        outputs.resize(maxSentencesNum);
+    static const int maxParagraphsNum = 30;
+    if ((int)outputs.size() > maxParagraphsNum) {
+        outputs.resize(maxParagraphsNum);
     }
 
     return true;
@@ -201,7 +205,7 @@ bool TextRanker::InitCharsList(std::vector<Paragraph>& paragraphs, const std::ve
         //ints.push_back(paragraphs[i].GetPosition());
         root = insertTree(root, newNode(i, paragraphs[i].GetPosition()) );
     } 
-
+    inorder(root);
 	// check the intervals
     for (size_t i = 0; i < characters.size(); i++)
     {
@@ -211,6 +215,7 @@ bool TextRanker::InitCharsList(std::vector<Paragraph>& paragraphs, const std::ve
             if (res == nullptr)
                 // צריך לבדוק מה לעשות במקרה של דמות שחוצה את הפסקאות
                 std::cout << "\nNo overlaps";
+                // לסדר שאם הוא נמצא בשתיהם אז הקשת שלהם תקבל ניקוד גבוה.
             else
                 paragraphs[res->paragraphIndex].SetCharacters(i);
 
