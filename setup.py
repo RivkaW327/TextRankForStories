@@ -18,7 +18,6 @@ ext_modules = [
             'C:\\Users\\user\\Documents\\year2\\project\\TextRank\\TextRank', 
         ],
         language='c++',
-        extra_compile_args=['-g'],  # הוספת דגל הניפוי
     ),
 ]
 setup(

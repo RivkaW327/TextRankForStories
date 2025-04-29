@@ -115,7 +115,7 @@ bool TextRanker::ExtractParagraphs(const std::string& input, std::vector<Paragra
     //}
 
     // Paragraph segmentation
-    static const int minParagraphLen = 30;   // Minimum number of characters in a sentence (need to consider word separators, UTF encoding, etc.)
+    static const int minParagraphLen = 40;   // Minimum number of characters in a sentence (need to consider word separators, UTF encoding, etc.)
     std::vector<Paragraph> tempOutput = split_with_positions(tempInput, "###PARA###");
     std::vector<Paragraph> tempOutput2;
     for (int i=0; i<(int)tempOutput.size(); i++) {
@@ -197,25 +197,25 @@ bool TextRanker::InitCharsList(std::vector<Paragraph>& paragraphs, const std::ve
     //std::vector<Interval> ints;
 
 	// init the interval tree
-    Node* root = nullptr;
+    std::unique_ptr<Node> root = nullptr;
     for (size_t i = 0; i < (int)paragraphs.size(); i++)
     {
         //ints.push_back(paragraphs[i].GetPosition());
-        root = insertTree(root, newNode(i, paragraphs[i].GetPosition()) );
-    } 
-    inorder(root);
+        root = Node::insertTree(std::move(root), std::make_unique<Node>(i, paragraphs[i].GetPosition()));
+    }
+    root->inorder();
 	// check the intervals
     for (size_t i = 0; i < characters.size(); i++)
     {
         for (size_t j = 0; j < characters[i].size(); j++)
         {
-            Node* res = overlapSearch(root, characters[i][j]);
+            Node* res = root->overlapSearch(characters[i][j]);
             if (res == nullptr)
                 // צריך לבדוק מה לעשות במקרה של דמות שחוצה את הפסקאות
                 std::cout << "\nNo overlaps ["<<characters[i][j].low<<" , "<<characters[i][j].high<<"]\n";
                 // לסדר שאם הוא נמצא בשתיהם אז הקשת שלהם תקבל ניקוד גבוה.
             else
-                paragraphs[res->paragraphIndex].SetCharacters(i);
+                paragraphs[res->GetParagraphIndex()].SetCharacters(i);
 
         }
     }

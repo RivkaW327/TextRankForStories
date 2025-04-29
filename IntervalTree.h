@@ -1,24 +1,34 @@
 #pragma once
 
+#include <memory>
+
 struct Interval {
+
 	int low, high;
+
 };
 
-struct Node {
+class Node
+
+{
+
+public:
+	int Getheight();
+	static std::unique_ptr<Node> rightRotate(std::unique_ptr<Node> y);
+	static std::unique_ptr<Node> leftRotate(std::unique_ptr<Node> x);	int getBalance();
+	void updateHeightAndMax();
+	static std::unique_ptr<Node> insertTree(std::unique_ptr<Node> root, std::unique_ptr<Node> n);
+	static bool isOverlapping(Interval i1, Interval i2);
+	Node* overlapSearch(Interval i);
+	void inorder();
+	int GetParagraphIndex();
+	Node(size_t paragraphIndex, Interval i);
+
+
+private:
 	size_t paragraphIndex;
-	Interval* i;
+	Interval i;
 	int max;
-	Node* left, * right;
-	int height=1;
+	std::unique_ptr<Node> left, right;
+	int height;
 };
-
-int height(Node* N);
-Node* rightRotate(Node* y);
-Node* leftRotate(Node* x);
-int getBalance(Node* N);
-void updateHeightAndMax(Node* node);
-Node* newNode(size_t pi, Interval i);
-Node* insertTree(Node* root, Node* n);
-bool isOverlapping(Interval i1, Interval i2);
-Node* overlapSearch(Node* root, Interval i);
-void inorder(Node* root);

@@ -32,8 +32,7 @@ private:
     double GetSimilarity(int a, int b);
     bool CalcParagraphScores();
     bool InitCharsList(std::vector<Paragraph>& paragraphs, const std::vector<std::vector<Interval>> characters);
-    // לבדוק אם אין פונקציה כזו שקיימת כבר---
-    void StringReplaceAll(std::string& str, const std::string& from, const std::string& to);
+    //void StringReplaceAll(std::string& str, const std::string& from, const std::string& to);
 
 //private:
 	std::string mInput;  // The input text
@@ -43,7 +42,6 @@ private:
 	int mMaxIter;   // Maximum number of iterations
     double mTol;   // Iteration accuracy
     std::vector<Paragraph> mParagraphs;  // Paragraphs after segmentation
-    //לבדוק האם לא כדאי להפוך לרשימת סמיכויות (במקום מטריצה).
     std::vector< std::vector<double>> mAdjacencyMatrix;  // Adjacency Matrix
     std::vector<double> mOutWeightSum;  // The weight of each node’s outbound link 
     std::vector<double> mScores;  // The score of each node

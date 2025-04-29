@@ -45,4 +45,7 @@
   <ItemGroup>
     <None Include="setup.py" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="text.txt" />
+  </ItemGroup>
 </Project>

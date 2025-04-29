@@ -1,168 +1,163 @@
+
 #include "IntervalTree.h"
 #include <iostream>
 #include <climits>
+#include <memory>
+
+
+
+Node::Node(size_t paragraphIndex, Interval i)
+{
+    this->paragraphIndex = paragraphIndex;
+    this->i = i;
+    this->max = i.high;
+    this->left = nullptr;
+    this->right = nullptr;
+    this->height = 0;
+}
 
 
 // A utility function to 
 // get the height of the tree 
-int height(Node* N) {
-    if (N == nullptr)
+int Node::Getheight() {
+    if (this == nullptr)
         return 0;
-    return N->height;
+    return this->height;
 }
 
 // A utility function to right 
 // rotate subtree rooted with y 
-Node* rightRotate(Node* y) {
-    Node* x = y->left;
-    Node* T2 = x->right;
+std::unique_ptr<Node> Node::rightRotate(std::unique_ptr<Node> y) {
+    std::unique_ptr<Node> x = std::move(y->left);
+    if (x == nullptr)
+        return y;
 
-    // Perform rotation 
-    x->right = y;
-    y->left = T2;
+    std::unique_ptr<Node> T2 = std::move(x->right);
 
-    //// Update heights 
-    //y->height = 1 + std::max(height(y->left),
-    //    height(y->right));
-    //x->height = 1 + std::max(height(x->left),
-    //    height(x->right));
+    x->right = std::move(y);
+    x->right->left = std::move(T2);
 
     // Update heights and max
-    updateHeightAndMax(y);
-    updateHeightAndMax(x);
+    x->right->updateHeightAndMax();
+    x->updateHeightAndMax();
 
-
-    // Return new root 
     return x;
 }
-
 // A utility function to left rotate 
 // subtree rooted with x 
-Node* leftRotate(Node* x) {
-    Node* y = x->right;
-    Node* T2 = y->left;
+std::unique_ptr<Node> Node::leftRotate(std::unique_ptr<Node> x) {
+    std::unique_ptr<Node> y = std::move(x->right);
+    if (y == nullptr)
+        return x;
 
-    // Perform rotation 
-    y->left = x;
-    x->right = T2;
+    std::unique_ptr<Node> T2 = std::move(y->left);
 
-    //// Update heights 
-    //x->height = 1 + std::max(height(x->left),
-    //    height(x->right));
-    //y->height = 1 + std::max(height(y->left),
-    //    height(y->right));
+    y->left = std::move(x);
+    y->left->right = std::move(T2);
 
     // Update heights and max
-    updateHeightAndMax(y);
-    updateHeightAndMax(x);
+    y->left->updateHeightAndMax();
+    y->updateHeightAndMax();
 
-    // Return new root 
     return y;
 }
 
 // Get balance factor of node N 
-int getBalance(Node* N) {
-    if (N == nullptr)
-        return 0;
-    return height(N->left) - height(N->right);
+int Node::getBalance() {
+    if (this->left == nullptr)
+    {
+        return 0 - this->right->Getheight();
+    }
+    else if (this->right == nullptr)
+    {
+        return this->left->Getheight();
+    }
+    else
+    {
+        return this->left->Getheight() - this->right->Getheight();
+    }
 }
 
-void updateHeightAndMax(Node* node) {
-    if (!node) return;
-    node->height = 1 + std::max(height(node->left), height(node->right));
-    node->max = std::max(
-        node->i->high,
+void Node::updateHeightAndMax() {
+    if (!this) return;
+    this->height = 1 + std::max(this->left->Getheight(), this->right->Getheight());
+    this->max = std::max(
+        this->i.high,
         std::max(
-            (node->left ? node->left->max : INT_MIN),
-            (node->right ? node->right->max : INT_MIN)
+            (this->left ? this->left->max : INT_MIN),
+            (this->right ? this->right->max : INT_MIN)
         )
     );
 }
 
-Node* newNode(size_t pi, Interval i) {
-    Node* temp = new Node;
-    temp->paragraphIndex = pi;
-    temp->i = new Interval(i);
-    temp->max = i.high;
-    temp->left = temp->right = nullptr;
-    return temp;
-}
 
-// לבדוק את האיזון בכל המצבים!!!!!
-Node* insertTree(Node* root, Node* n) {
-	n->max = n->i->high; // Update max value of this ancestor node
+
+std::unique_ptr<Node> Node::insertTree(std::unique_ptr<Node> root, std::unique_ptr<Node> n) {
     if (root == nullptr)
         return n;
 
-    //int l = n->i->low;
+    int n_low = n->i.low;
 
-    if (n->i->low < root->i->low)
-        root->left = insertTree(root->left, n);
+    if (n_low < root->i.low)
+        root->left = insertTree(std::move(root->left), std::move(n));
     else
-        root->right = insertTree(root->right, n);
+        root->right = insertTree(std::move(root->right), std::move(n));
 
-    //if (root->max < n->i->high)
-    //    root->max = n->i->high;
+    int balance = root->getBalance();
 
-    updateHeightAndMax(root);
+    // Left Left Case
+    if (balance > 1 && n_low < root->left->i.low)
+        return rightRotate(std::move(root));
 
+    // Right Right Case
+    if (balance < -1 && n_low > root->right->i.low)
+        return leftRotate(std::move(root));
 
-    // Update height of this ancestor node 
-    root->height = 1 + std::max(height(root->left),
-        height(root->right));
-    // Get the balance factor of this ancestor node 
-    int balance = getBalance(root);
-
-    // If this node becomes unbalanced, 
-    // then there are 4 cases 
-
-    // Left Left Case 
-    if (balance > 1 && n->i->low < root->left->i->low)
-        return rightRotate(root);
-
-    // Right Right Case 
-    if (balance < -1 && n->i->low > root->right->i->low)
-        return leftRotate(root);
-
-    // Left Right Case 
-    if (balance > 1 && n->i->low > root->left->i->low) {
-        root->left = leftRotate(root->left);
-        return rightRotate(root);
+    // Left Right Case
+    if (balance > 1 && n_low > root->left->i.low) {
+        root->left = leftRotate(std::move(root->left));
+        return rightRotate(std::move(root));
     }
 
-    // Right Left Case 
-    if (balance < -1 && n->i->low < root->right->i->low) {
-        root->right = rightRotate(root->right);
-        return leftRotate(root);
+    // Right Left Case
+    if (balance < -1 && n_low < root->right->i.low) {
+        root->right = rightRotate(std::move(root->right));
+        return leftRotate(std::move(root));
     }
 
-	//std::cout << getBalance(root) << std::endl;
-    // Return the (unchanged) node pointer 
+    root->updateHeightAndMax();
+
     return root;
-
 }
-// לסדר שאם הוא נמצא בשתיהם אז הקשת שלהם תקבל ניקוד גבוה.
-bool isOverlapping(Interval i1, Interval i2) {
+
+bool Node::isOverlapping(Interval i1, Interval i2) {
     return i1.low <= i2.high && i2.low <= i1.high;
 }
 
 // לבדוק מה קורה אם הוא שייך ל2 פסקאות (לא שייך לשום פסקה בודדת)
-Node* overlapSearch(Node* root, Interval i) {
-    if (root == nullptr) return nullptr;
 
-    if (isOverlapping(*(root->i), i))
-        return root;
+Node* Node::overlapSearch(Interval i) {
+    if (this == nullptr) return nullptr;
 
-    if (root->left != nullptr && root->left->max >= i.low)
-        return overlapSearch(root->left, i);
+    if (isOverlapping(this->i, i))
+        return this;
 
-    return overlapSearch(root->right, i);
+    if (this->left != nullptr && this->left->max >= i.low)
+        return this->left->overlapSearch(i);
+
+    return this->right->overlapSearch(i);
 }
 
-void inorder(Node* root) {
-    if (root == nullptr) return;
-    inorder(root->left);
-    std::cout << "[" << root->i->low << ", " << root->i->high << "]"
-        << " max = " << root->max << std::endl;
-    inorder(root->right);
+void Node::inorder() {
+    if (this == nullptr) return;
+    this->left->inorder();
+    std::cout << "[" << this->i.low << ", " << this->i.high << "]"
+        << " max = " << this->max << std::endl;
+    this->right->inorder();
 }
+
+int Node::GetParagraphIndex() {
+    return this->paragraphIndex;
+}
+
+
