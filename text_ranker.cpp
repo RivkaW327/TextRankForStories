@@ -1,7 +1,7 @@
 #include "text_ranker.h"
 #include "IntervalTree.h"
 #include <iostream>
-
+#include <string>
 
 // קמפול:
 //  C:\Users\user\Documents\year2\project\TextRank\TextRank>C:\Users\user\AppData\Local\Programs\Python\Python312\python.exe setup.py build_ext --inplace
@@ -13,29 +13,29 @@ static std::vector<Paragraph> split_with_positions(const std::string& str, const
     while ((end = str.find(delimiter, start)) != std::string::npos) {
         intr.low = start;
         intr.high = end;
-        tokens.push_back(Paragraph(str.substr(start, end - start), intr));
+        tokens.push_back(Paragraph(intr));
         start = end + delimiter.length();
     }
     if (start < str.length()) {
         intr.low = start;
         intr.high = str.length();
-        tokens.push_back(Paragraph(str.substr(start), intr));
+        tokens.push_back(Paragraph(intr));
     }
     return tokens;
 }
 
-static std::vector<std::string> split(const std::string& str, const std::string& delimiter) {
-    std::vector<std::string> tokens;
-    size_t start = 0, end = 0;
-    while ((end = str.find(delimiter, start)) != std::string::npos) {
-        tokens.push_back(str.substr(start, end - start));
-        start = end + delimiter.length();
-    }
-    if (start < str.length()) {
-        tokens.push_back(str.substr(start));
-    }
-    return tokens;
-}
+//static std::vector<std::string> split(const std::string& str, const std::string& delimiter) {
+//    std::vector<std::string> tokens;
+//    size_t start = 0, end = 0;
+//    while ((end = str.find(delimiter, start)) != std::string::npos) {
+//        tokens.push_back(str.substr(start, end - start));
+//        start = end + delimiter.length();
+//    }
+//    if (start < str.length()) {
+//        tokens.push_back(str.substr(start));
+//    }
+//    return tokens;
+//}
 
 
 
@@ -45,11 +45,12 @@ static bool PairComp(std::pair<int, double> a, std::pair<int, double> b)
     return a.second < b.second;
 }
 
-bool TextRanker::ExtractKeyParagraphs(const std::string& input, std::vector<std::vector<std::pair<int, int>>> characters, std::vector<Paragraph>& outputs, int topK)
+std::vector<std::string> TextRanker::ExtractKeyParagraphs(const std::string& input, std::vector<std::vector<std::pair<int, int>>> characters, int topK)
 {
-    outputs.clear();
+    std::vector<std::string> outputs;
+    //outputs.clear();
     if (input.empty() || topK < 1) {
-        return false;
+        return outputs;
     }
 
     for (size_t i = 0; i < characters.size(); i++)
@@ -70,7 +71,7 @@ bool TextRanker::ExtractKeyParagraphs(const std::string& input, std::vector<std:
     ret &= CalcParagraphScores();
 
     if (!ret) {
-        return false;
+        return outputs;
     }
 
     // Return the sentences with the highest score
@@ -85,10 +86,11 @@ bool TextRanker::ExtractKeyParagraphs(const std::string& input, std::vector<std:
 
     for(int i=0; i<topK && i<kDim; ++i) {
         int id = visitPairs[i].first;
-        outputs.push_back(mParagraphs[id]);
+        outputs.push_back(input.substr(mParagraphs[id].GetPosition().low, mParagraphs[id].GetPosition().high - mParagraphs[id].GetPosition().low));
     }
-    return true;
+    return outputs;
 }
+
 
 bool TextRanker::ExtractParagraphs(const std::string& input, std::vector<Paragraph>& outputs)
 {
@@ -135,7 +137,6 @@ bool TextRanker::ExtractParagraphs(const std::string& input, std::vector<Paragra
     if ((int)outputs.size() > maxParagraphsNum) {
         outputs.resize(maxParagraphsNum);
     }
-
     return true;
 }
 

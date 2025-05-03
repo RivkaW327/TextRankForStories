@@ -23,7 +23,7 @@ public:
 
      ~TextRanker() { }
 
-	 bool ExtractKeyParagraphs(const std::string& input, std::vector<std::vector<std::pair<int, int>>> characters, std::vector<Paragraph>& outputs, int topK);
+     std::vector<std::string> ExtractKeyParagraphs(const std::string& input, std::vector<std::vector<std::pair<int, int>>> characters, int topK);
 
 private:
     bool ExtractParagraphs(const std::string& input, std::vector<Paragraph>& output);

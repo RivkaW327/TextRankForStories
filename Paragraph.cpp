@@ -13,9 +13,9 @@ Interval  Paragraph::GetPosition() const {
 	return mPosition;
 }
 
-const std::string& Paragraph::GetText() const { 
-	return mText;
-}
+//const std::string& Paragraph::GetText() const { 
+//	return mText;
+//}
 
 void Paragraph::SetCharacters(size_t character) {
 	mCharacters.insert(character); 
