@@ -23,10 +23,10 @@ public:
 
      ~TextRanker() { }
 
-     std::vector<std::string> ExtractKeyParagraphs(const std::string& input, std::vector<std::vector<std::pair<int, int>>> characters, int topK);
+     std::vector<std::string> ExtractKeyParagraphs(const std::string& input, std::vector< std::pair<int, int>> paragraphs, std::vector<std::vector<std::pair<int, int>>> characters, int topK);
 
 private:
-    bool ExtractParagraphs(const std::string& input, std::vector<Paragraph>& output);
+    bool ExtractParagraphs(const std::string& input, std::vector<std::pair<int, int>> paragraphs, std::vector<Paragraph>& output);
     bool RemoveDuplicates(const std::vector<Paragraph>& input, std::vector<Paragraph>& output);
     bool BuildGraph(std::vector<Paragraph>& paragraphs, const std::vector<std::vector<Interval>>& characters);
     double GetSimilarity(int a, int b);

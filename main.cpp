@@ -16,6 +16,18 @@ std::string loadTextFile(const std::string& filename) {
 int main() {
 	TextRanker textRanker;
 	std::string input = loadTextFile("text.txt");
+	std::vector <std::pair<int, int>> paragraphs = {
+		{0, 100},
+		{101, 200},
+		{201, 300},
+		{301, 400},
+		{401, 500},
+		{501, 600},
+		{601, 700},
+		{701, 800},
+		{801, 900},
+		{901, 1000}
+	};
 	std::vector<std::vector<std::pair<int, int>>> characters = {
 		{
 {327, 331},
@@ -289,12 +301,12 @@ int main() {
 },
 {
 		  {10925, 10932},
+		  {11105, 11109},
 		  {11031, 11034},
-		  {11105, 11109}
 } };
 
 	// לסדר שמספר הפסקאות המחולצות יהיו לפי אחוזים
-	std::vector<std::string> outputs = textRanker.ExtractKeyParagraphs(input, characters, 25);
+	std::vector<std::string> outputs = textRanker.ExtractKeyParagraphs(input, paragraphs, characters, 25);
 	std::cout << "Extracted Paragraphs:\n";
 	for (const std::string& para : outputs) {
 		std::cout << para << "\n\n\n\n";
